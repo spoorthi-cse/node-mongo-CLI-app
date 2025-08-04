@@ -7,9 +7,9 @@ mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {
-  console.log('✅ Connected to MongoDB');
+  console.log('Connected to MongoDB');
   showMenu();
-}).catch(err => console.error('❌ Connection Error:', err));
+}).catch(err => console.error('Connection Error:', err));
 
 // Define Schema & Model
 const studentSchema = new mongoose.Schema({
@@ -54,12 +54,12 @@ function handleMenu(choice) {
       deleteStudent();
       break;
     case '5':
-      console.log('👋 Exiting...');
+      console.log('Exiting...');
       rl.close();
       mongoose.disconnect();
       break;
     default:
-      console.log('❌ Invalid choice. Try again.');
+      console.log('Invalid choice. Try again.');
       showMenu();
   }
 }
@@ -70,18 +70,18 @@ function insertStudent() {
     rl.question('Enter age: ', age => {
       rl.question('Enter course: ', course => {
         if (!name || !age || !course || isNaN(age)) {
-          console.log('❌ Invalid input. Please enter correct values.');
+          console.log('Invalid input. Please enter correct values.');
           return showMenu();
         }
 
         const student = new Student({ name, age: Number(age), course });
         student.save()
           .then(() => {
-            console.log('✅ Student inserted successfully.');
+            console.log('Student inserted successfully.');
             showMenu();
           })
           .catch(err => {
-            console.error('❌ Insert failed:', err);
+            console.error('Insert failed:', err);
             showMenu();
           });
       });
@@ -94,9 +94,9 @@ function viewStudents() {
   Student.find()
     .then(students => {
       if (students.length === 0) {
-        console.log('🚫 No students found.');
+        console.log(' No students found.');
       } else {
-        console.log('\n📄 Student Records:');
+        console.log('\n Student Records:');
         students.forEach((s, index) => {
           console.log(`${index + 1}. ${s.name}, Age: ${s.age}, Course: ${s.course}, ID: ${s._id}`);
         });
@@ -104,7 +104,7 @@ function viewStudents() {
       showMenu();
     })
     .catch(err => {
-      console.error('❌ Error fetching students:', err);
+      console.error(' Error fetching students:', err);
       showMenu();
     });
 }
@@ -113,7 +113,7 @@ function viewStudents() {
 function updateStudent() {
   rl.question('Enter Student ID to update: ', id => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      console.log('❌ Invalid ID format.');
+      console.log('Invalid ID format.');
       return showMenu();
     }
 
@@ -127,14 +127,14 @@ function updateStudent() {
           )
             .then(updated => {
               if (updated) {
-                console.log('✅ Student updated.');
+                console.log('Student updated.');
               } else {
-                console.log('❌ No student found with that ID.');
+                console.log('No student found with that ID.');
               }
               showMenu();
             })
             .catch(err => {
-              console.error('❌ Update error:', err);
+              console.error('Update error:', err);
               showMenu();
             });
         });
@@ -147,21 +147,21 @@ function updateStudent() {
 function deleteStudent() {
   rl.question('Enter Student ID to delete: ', id => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      console.log('❌ Invalid ID format.');
+      console.log('Invalid ID format.');
       return showMenu();
     }
 
     Student.findByIdAndDelete(id)
       .then(deleted => {
         if (deleted) {
-          console.log('🗑️ Student deleted.');
+          console.log('Student deleted.');
         } else {
-          console.log('❌ No student found with that ID.');
+          console.log('No student found with that ID.');
         }
         showMenu();
       })
       .catch(err => {
-        console.error('❌ Delete error:', err);
+        console.error('Delete error:', err);
         showMenu();
       });
   });
